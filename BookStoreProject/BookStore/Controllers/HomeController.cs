@@ -12,10 +12,28 @@ namespace BookStore.Controllers
     {
         //
         // GET: /Home/
+
+        BookStoreEntities storeDB = new BookStoreEntities();
+
         public ActionResult Index()
         {
-            return View();
+            // Get most popular albums
+            var books = GetTopSellingBookss(5);
+
+            return View(books);
+        }
+
+        private List<Book> GetTopSellingAlbums(int count)
+        {
+            // Group the order details by album and return
+            // the albums with the highest count
+
+            return storeDB.Books
+                .OrderByDescending(a => a.OrderDetails.Count())
+                .Take(count)
+                .ToList();
         }
     }
+}
 }
 
